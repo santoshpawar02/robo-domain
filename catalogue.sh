@@ -4,6 +4,8 @@ dnf module enable nodejs:20 -y
 dnf install nodejs -y
 
 useradd roboshop
+cp -r catalogue.service /etc/systemd/system/catalogue.service
+cp -r mongo.repo /etc/yum.repos.d/mongo.repo
 
 rm -rf /app
 mkdir /app 
@@ -15,16 +17,12 @@ unzip /tmp/catalogue.zip
 cd /app 
 npm install 
 
-cp -r catalogue.service /etc/systemd/system/catalogue.service
-
 
 systemctl daemon-reload
 
 systemctl enable catalogue 
-systemctl start catalogue
-
-cp -r mongo.repo /etc/yum.repos.d/mongo.repo
+systemctl restart catalogue
 
 dnf install mongodb-mongosh -y
 
-mongosh --host localhost </app/db/master-data.js
+mongosh --host mongo-dev.santoshpawar.site </app/db/master-data.js
